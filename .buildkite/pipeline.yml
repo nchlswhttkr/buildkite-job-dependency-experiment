@@ -1,0 +1,51 @@
+steps:
+  # should run immediately
+  - label: ":one:"
+    command: echo 1
+    key: one
+
+  # should wait on one and two before beginning
+  - type: waiter
+    depends_on:
+      - one
+      - two
+
+  # should run immediately (i think, since the above waiter depends on it)
+  - label: ":two:"
+    command: echo 2
+    key: two
+
+  # should prompt after the above waiter
+  - input: ":question:"
+    fields:
+      - text: "First field"
+        key: first-field
+      - text: "Second field"
+        key: second-field
+
+  # should run immediately (not after the waiter)
+  - label: ":three:"
+    command: echo 3
+    key: three
+    depends_on: ~
+
+  # should after second input
+  - label: ":four:"
+    command: echo 4
+    key: four
+
+  # should run after first input (perhaps, might wait for the input to finish)
+  - label: ":exclamation:"
+    command: buildkite-agent meta-data first-field
+    key: answer
+    depends_on: first-field
+
+  # should unlock after answer (after first input)
+  - type: waiter
+    depends_on:
+      - answer
+
+  # should run after the immediately above waiter
+  - label: ":five:"
+    command: echo 5
+    key: five
