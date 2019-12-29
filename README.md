@@ -29,3 +29,9 @@ I'll leave the concurrent agent changes investigation stuff for another run.
 Commit `02488e2b` // Build https://buildkite.com/nchlswhttkr/dependencies-and-input-experiment/builds/3
 
 So I forgot the set the default value and the `answer` job failed. It did run without waiting for the input step though.
+
+### Third run
+
+Commit `d5d66a79` // Build https://buildkite.com/nchlswhttkr/dependencies-and-input-experiment/builds/4
+
+I made a typo and forgot to include the actual subcommand. Should have been `buildkite-agent meta-data get first-field --default "NOT SET"`

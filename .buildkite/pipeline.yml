@@ -35,7 +35,7 @@ steps:
 
   # should run after first input (perhaps, might wait for the input to finish)
   - label: ":exclamation:"
-    command: buildkite-agent meta-data first-field --default "NOT SET"
+    command: buildkite-agent meta-data get first-field --default "NOT SET"
     key: answer
 
   # should unlock after answer (after first input)
