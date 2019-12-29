@@ -35,3 +35,15 @@ So I forgot the set the default value and the `answer` job failed. It did run wi
 Commit `d5d66a79` // Build https://buildkite.com/nchlswhttkr/dependencies-and-input-experiment/builds/4
 
 I made a typo and forgot to include the actual subcommand. Should have been `buildkite-agent meta-data get first-field --default "NOT SET"`
+
+### Fourth run
+
+Commit `869c1c80` // Build https://buildkite.com/nchlswhttkr/dependencies-and-input-experiment/builds/5
+
+So `answer` ran without waiting for input (rightly so), and the remaining waiter and job went after it.
+
+The job then went into blocked mode, waiting for me to fill out the input. When I filled out the input, the build remained blocked (as of about 3-4 minutes later).
+
+I'm going to up the agents now to see if that allows job `three` to run before the first waiter.
+
+I'm gonna record the results and wrap up for tonight with this next run. Will probably pick up again tomorrow morning.
