@@ -37,7 +37,6 @@ steps:
   - label: ":exclamation:"
     command: buildkite-agent meta-data first-field
     key: answer
-    depends_on: first-field
 
   # should unlock after answer (after first input)
   - type: waiter
