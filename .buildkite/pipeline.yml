@@ -4,16 +4,15 @@ steps:
     command: echo 1
     key: one
 
-  # should wait on one and two before beginning
-  - type: waiter
-    depends_on:
-      - one
-      - two
-
   # should run immediately (i think, since the above waiter depends on it)
   - label: ":two:"
     command: echo 2
     key: two
+
+  # should wait on one but not two
+  - type: waiter
+    depends_on:
+      - one
 
   # should prompt after the above waiter
   - input: ":question:"
@@ -29,7 +28,7 @@ steps:
     key: three
     depends_on: ~
 
-  # should after second input
+  # should after the waiter, not the input
   - label: ":four:"
     command: echo 4
     key: four
