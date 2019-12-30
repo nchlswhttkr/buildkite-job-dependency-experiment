@@ -1,20 +1,20 @@
 steps:
-  # should run immediately
+  # run immediately
   - label: ":one:"
     command: echo 1
     key: one
 
-  # should run immediately (i think, since the above waiter depends on it)
+  # runs immediately
   - label: ":two:"
     command: echo 2
     key: two
 
-  # should wait on one but not two
+  # waits on one but not two
   - type: waiter
     depends_on:
       - one
 
-  # should prompt after the above waiter
+  # can be filled out immediately since inputs do not create dependencies
   - input: ":question:"
     fields:
       - text: "First field"
@@ -22,28 +22,28 @@ steps:
       - text: "Second field"
         key: second-field
 
-  # should run immediately (not after the waiter)
+  # runs immediately
   - label: ":three:"
     command: echo 3
     key: three
     depends_on: ~
 
-  # should after the waiter, not the input
+  # runs after the first waiter
   - label: ":four:"
     command: echo 4
     key: four
 
-  # should run after first input (perhaps, might wait for the input to finish)
+  # runs after the first waiter
   - label: ":exclamation:"
     command: buildkite-agent meta-data get first-field --default "NOT SET"
     key: answer
 
-  # should unlock after answer (after first input)
+  # runs after answer
   - type: waiter
     depends_on:
       - answer
 
-  # should run after the immediately above waiter
+  # runs after the immediately preceding waiter
   - label: ":five:"
     command: echo 5
     key: five

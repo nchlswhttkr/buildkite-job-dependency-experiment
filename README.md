@@ -1,4 +1,4 @@
-# test
+# buildkite-job-dependency-experiment
 
 https://buildkite.com/nchlswhttkr/dependencies-and-input-experiment
 
@@ -47,3 +47,31 @@ The job then went into blocked mode, waiting for me to fill out the input. When 
 I'm going to up the agents now to see if that allows job `three` to run before the first waiter.
 
 I'm gonna record the results and wrap up for tonight with this next run. Will probably pick up again tomorrow morning.
+
+### Fifth run
+
+Commit `824c4698` // Build https://buildkite.com/nchlswhttkr/dependencies-and-input-experiment/builds/6
+
+So I mucked up when running the extra agents, because I just ran them from terminal sessions. This caused problems at runtime and the jobs got stuck waiting for user input.
+
+However looking at the timelines, job `three` did start before job `one` had finished (before the first waiter unblocked).
+
+Once `one` finished, `four` and `five` started as well, since the first waiter only depended on `one` and not on `two`.
+
+I think I'll just [follow the tutorial](https://buildkite.com/docs/tutorials/parallel-builds#running-multiple-agents) to set up multiple agents properly though...
+
+### Sixth run
+
+Commit `824c4698` // Build https://buildkite.com/nchlswhttkr/dependencies-and-input-experiment/builds/7
+
+A permissions error prevents the build agent from starting jobs. This was due to the previous step's mistake which messed up the build environment. The build directories for some agents were owned by root instead of buildkite-agent. In hindsight I really should have done it this way...
+
+### Seventh run
+
+Commit `824c4698` // Build https://buildkite.com/nchlswhttkr/dependencies-and-input-experiment/builds/8
+
+Much like the fifth run, jobs `one`, `two` and `three` were all scheduled immediately, without `three` depending on the waiter. After that the second set of jobs ran, and later the final job.
+
+Seems to be running as expected. I'm going to update the comments in the YAML file to identify when they run. You can check this against the timeline of each job within Buildkite.
+
+The most noticable error was saying that the input job would depend on the waiter, which isn't true because inputs don't "create any dependencies to the steps before and after it" [[1]](https://buildkite.com/docs/pipelines/input-step).
