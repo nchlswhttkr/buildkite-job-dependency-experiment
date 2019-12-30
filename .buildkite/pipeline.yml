@@ -16,6 +16,7 @@ steps:
 
   # should prompt after the above waiter
   - input: ":question:"
+    key: question
     fields:
       - text: "First field"
         key: first-field
@@ -37,7 +38,7 @@ steps:
   - label: ":exclamation:"
     command: buildkite-agent meta-data first-field
     key: answer
-    depends_on: first-field
+    depends_on: question
 
   # should unlock after answer (after first input)
   - type: waiter
