@@ -37,6 +37,7 @@ steps:
   - label: ":exclamation:"
     command: buildkite-agent meta-data get first-field --default "NOT SET"
     key: answer
+    depends_on: THIS_STEP_KEY_DOES_NOT_EXIST
 
   # runs after answer
   - type: waiter
