@@ -36,7 +36,7 @@ steps:
 
   # should run after first input (perhaps, might wait for the input to finish)
   - label: ":exclamation:"
-    command: buildkite-agent meta-data first-field
+    command: buildkite-agent meta-data get first-field
     key: answer
     depends_on: question
 
