@@ -4,6 +4,32 @@ https://buildkite.com/nchlswhttkr/dependencies-and-input-experiment
 
 Just trying out some newer features in Buildkite, with [step dependencies](https://buildkite.com/changelog/84-introducing-pipeline-step-dependencies) and [input steps](https://buildkite.com/docs/pipelines/input-step) (which seem to be partially released and documented).
 
+This is mostly a log of me observing and debugging a series of builds, and me trying to dissect some of the behaviour I encountered.
+
+---
+
+### Steps with a missing dependency
+
+In the case of the first run, the `answer` I assumed the the key used for each field would be accessible as a step dependency. This isn't true, and it isn't possible to submit a single field without filling out all fields. You can however place a `key` field on the input block itself, and depend on this.
+
+[One line from the docs](https://buildkite.com/docs/pipelines/dependencies#order-of-operations) seems a bit confusing, and it could probably do with some clarification.
+
+> If the step you're dependent on doesn't exist, the build will fail without running the step that is waiting for the dependency.
+
+From what I could gauge from the [build itself](https://buildkite.com/nchlswhttkr/dependencies-and-input-experiment/builds/2), this build should have failed because the `answer` step depended on a step key that didn't exist. There was a field with the key in the input step, but it seems step keys and field keys are not different. The command itself for the `answer` step had a typo in it, but that doesn't matter because the job was not scheduled and run.
+
+My guess would be that the build was stuck waiting for a step with the desired key to be created, so it could run that and then run the `answer` step. The build stayed "running" (do builds eventually time out if its left with no jobs scheduled or running?). The documentations imply to me that the build would immediately fail with some kind of "no step with key `<key>` was found for step `answer`, and the build failed" error message.
+
+Perhaps the lack of immediate failure is intentional, to wait for a job to be created?
+
+### All steps can have a key
+
+The current docs show the `key` field as only being available for command steps, but all steps can have a `depends_on` field. The `key` field for `fields` on an input/block step are for meta-data keys, not step keys.
+
+We can show that all fields support a key attribute with a [build with a set of command steps](https://buildkite.com/nchlswhttkr/dependencies-and-input-experiment/builds/15) that each depends on a different step type.
+
+In this case, each respective command step ran after the step it depended on passed, so they can have keys.
+
 ---
 
 ### First run
