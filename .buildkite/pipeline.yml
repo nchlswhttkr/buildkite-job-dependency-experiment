@@ -1,0 +1,42 @@
+steps:
+  # the steps we're testing for keys run after this step
+  - command: echo root
+    key: root
+
+  # COMMAND STEPS THAT RUN AFTER THEIR DEPENDENT STEPS
+  # run after the dep-command step
+  - command: echo command
+    depends_on: dep-command
+
+  # runs after the dep-waiter step
+  - command: echo waiter
+    depends_on: dep-waiter
+
+  # runs after the dep-block step
+  - command: echo block
+    depends_on: dep-block
+
+  # runs after the dep-input step
+  - command: echo input
+    depends_on: dep-input
+
+  # runs after the dep-trigger step
+  - command: echo trigger
+    depends_on: dep-trigger
+
+  # THE STEPS WERE TESTING FOR KEYS ON, THEY RUN AFTER THE ROOT COMMAND
+  - command: echo dep-command
+    key: dep-command
+    depends_on: root
+  - wait: ~
+    key: dep-waiter
+    depends_on: root
+  - block: Block
+    key: dep-block
+    depends_on: root
+  - input: Block
+    key: dep-input
+    depends_on: root
+  - trigger: nchlswhttkr-dot-com
+    key: dep-trigger
+    depends_on: root
