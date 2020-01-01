@@ -1,0 +1,21 @@
+steps:
+  - block: "Deploy To"
+    fields:
+      - select: "Regions"
+        key: "deploy-regions"
+        hint: "Which regions should we deploy this to? :earth_asia:"
+        options:
+          - label: "North America"
+            value: "n
+            a"
+          - label: "Europe"
+            value: "eu
+            r"
+          - label: "Asia"
+            value: "as
+            ia"
+          - label: "Oceania"
+            value: "au
+            nz"
+  - wait
+  - command: buildkite-agent meta-data get "deploy-regions"
