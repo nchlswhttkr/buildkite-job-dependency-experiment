@@ -4,6 +4,7 @@ steps:
       - select: "Regions"
         key: "deploy-regions"
         hint: "Which regions should we deploy this to? :earth_asia:"
+        multiple: true
         options:
           - label: "North America"
             value: "n
