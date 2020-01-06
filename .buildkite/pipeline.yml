@@ -1,0 +1,20 @@
+steps:
+  - command:
+      - echo fails
+      - exit 1
+    key: depend-on-me
+  - command: echo passes
+    key: depend-on-me-2
+  - command:
+      - echo also fails
+      - exit 1
+    key: depend-on-me-3
+
+  - command: echo depends
+    depends_on:
+      - step: depend-on-me
+        allow_failure: true
+      - step: depend-on-me-2
+        allow_failure: false
+      - step: depend-on-me-3
+        # no allow_failure_specified, checking the default value is false
