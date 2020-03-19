@@ -1,0 +1,3 @@
+steps:
+  # kick off a build via API call in another pipeline
+  - command: "script.sh"
